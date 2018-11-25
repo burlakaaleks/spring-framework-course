@@ -1,3 +1,8 @@
+import beans.Client;
+import beans.ConsoleEventLogger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class App {
 
     private Client client;
@@ -9,10 +14,17 @@ public class App {
         eventLogger.logEvent(message);
     }
 
+    public App(Client client, ConsoleEventLogger logger){
+        this.client = client;
+        this.eventLogger = logger;
+    }
+
     public static void main(String[] args) {
-        App app = new App();
-        app.client = new Client("1", "John Smith");
-        app.eventLogger = new ConsoleEventLogger();
+        ApplicationContext ctx =
+                new ClassPathXmlApplicationContext("spring.xml");
+        App app = (App) ctx.getBean("app");
+
+
         app.logEvent("Some event for user 1");
     }
 }
